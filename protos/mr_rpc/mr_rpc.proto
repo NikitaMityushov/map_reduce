@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package mr_rpc;
+
+option go_package = "module github.com/nikitamityushov/map_reduce/protos";
+
+service MapReduce {
+    rpc GetTasks(GetTasksRequest) returns (GetTasksResponse);
+}
+
+message GetTasksRequest {
+
+}
+
+message GetTasksResponse {
+    repeated string tasks = 1;
+}
