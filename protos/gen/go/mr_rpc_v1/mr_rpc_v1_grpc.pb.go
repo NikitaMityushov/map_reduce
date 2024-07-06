@@ -2,9 +2,9 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v5.27.1
-// source: mr_rpc.proto
+// source: mr_rpc_v1.proto
 
-package protos
+package mr_rpc_v1
 
 import (
 	context "context"
@@ -101,5 +101,5 @@ var MapReduce_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "mr_rpc.proto",
+	Metadata: "mr_rpc_v1.proto",
 }

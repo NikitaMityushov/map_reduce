@@ -1,1 +1,1 @@
-MAPREDUCE imlementation
+MAPREDUCE implementation
