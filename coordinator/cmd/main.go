@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/NikitaMityushov/map_reduce/coordinator/internal/app"
 	"github.com/NikitaMityushov/map_reduce/coordinator/internal/config"
 )
 
@@ -14,11 +15,14 @@ func main() {
 	// 2) logger init
 	log := setupLogger(cfg.Env)
 
-	log.Info("Coordinator is started", slog.Any("cfg", cfg))
-
 	// 3) init app
+	application := app.New(log, cfg.GRPC.Port)
 
 	// 4) start grpc server
+	application.GRPCSrv.MustRun()
+
+	const op = "main"
+	log.With(slog.String("op", op)).Info("Coordinator is started", slog.Any("cfg", cfg))
 }
 
 func setupLogger(env string) *slog.Logger {
