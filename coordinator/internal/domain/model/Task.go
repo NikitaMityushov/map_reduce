@@ -3,7 +3,7 @@ package model
 type Task struct {
 	Id         uint
 	TaskType   TaskType
-	TaskChunks []string
+	Chunks []string
 	Status     Status
 }
 

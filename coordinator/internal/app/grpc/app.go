@@ -18,10 +18,12 @@ type App struct {
 func New(
 	log *slog.Logger,
 	port int,
+	chunks []string,
+	nReduce int,
 ) *App {
 	gRPCServer := grpc.NewServer()
 
-	api.RegisterServerAPI(gRPCServer)
+	api.RegisterServerAPI(gRPCServer, chunks, nReduce)
 
 	return &App{
 		log:        log,

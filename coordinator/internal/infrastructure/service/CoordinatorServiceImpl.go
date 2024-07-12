@@ -1,24 +1,34 @@
 package service
 
 import (
-	"errors"
+	"sync"
 
+	"github.com/NikitaMityushov/map_reduce/coordinator/internal/domain/errors"
 	"github.com/NikitaMityushov/map_reduce/coordinator/internal/domain/model"
-	"github.com/NikitaMityushov/map_reduce/coordinator/internal/domain/repository"
+	statemachine "github.com/NikitaMityushov/map_reduce/coordinator/internal/domain/state_machine"
 )
 
 type coordinatorServiceImpl struct {
-	chunksRepository repository.ChunksRepository
+	mu               *sync.Mutex
+	CoordinatorState statemachine.CoordinatorState
 }
 
-func NewCoordinatorServiceImpl(r repository.ChunksRepository) *coordinatorServiceImpl {
-	return &coordinatorServiceImpl{r}
-}
+func NewCoordinatorServiceImpl(st statemachine.CoordinatorState) *coordinatorServiceImpl {
 
-func (c *coordinatorServiceImpl) GetTask() (model.Task, error) {
-	chunks, err := c.chunksRepository.GetChunks()
-	if err != nil {
-		return model.Task{}, errors.New("chunks repository problem")
+	return &coordinatorServiceImpl{
+		mu:               new(sync.Mutex),
+		CoordinatorState: st,
 	}
-	return model.Task{Id: 1, TaskType: model.MAP, TaskChunks: chunks, Status: model.CREATED}, nil
+}
+
+func (c *coordinatorServiceImpl) GetTask() (model.Task, errors.CoordinatorError) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	task, err := c.CoordinatorState.TaskRequested()
+	if err != nil {
+		return model.Task{}, err
+	} else {
+		return task, nil
+	}
 }

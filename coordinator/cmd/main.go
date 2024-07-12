@@ -12,19 +12,21 @@ import (
 
 func main() {
 	// 1) config init
-	cfg := config.MustLoad()
+	cfg, chunks, nReduce := config.MustLoad()
 
 	// 2) logger init
 	log := setupLogger(cfg.Env)
 
 	// 3) init app
-	application := app.New(log, cfg.GRPC.Port)
+	application := app.New(log, cfg.GRPC.Port, chunks, nReduce)
 
 	// 4) start grpc server
 	go application.GRPCSrv.MustRun()
 
 	const op = "main"
-	log.With(slog.String("op", op)).Info("Coordinator is started", slog.Any("cfg", cfg))
+	log.With(slog.String("op", op)).Info("Coordinator is started", slog.Any("cfg", cfg), slog.Any("chunks", chunks), slog.Any("nReduce", nReduce))
+
+	// 5) graceful shutdown
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT)
 
