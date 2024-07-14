@@ -18,7 +18,7 @@ type serverAPI struct {
 
 func RegisterServerAPI(gRPC *grpc.Server, chunks []string, nReduce int) {
 	state := statemachine.NewCoordinatorState(chunks, nReduce)
-	coorService := infra.NewCoordinatorServiceImpl(*state)
+	coorService := infra.NewCoordinatorServiceImpl(state)
 
 	rpc.RegisterMapReduceServer(gRPC, &serverAPI{coordinatorService: coorService})
 }
