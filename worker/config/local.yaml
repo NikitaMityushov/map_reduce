@@ -1,0 +1,5 @@
+env: "local"
+grpc:
+  address: "localhost:51051"
+  timeout: 10s
+  retriesCount: 5

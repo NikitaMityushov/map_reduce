@@ -6,8 +6,8 @@ import (
 	grpcapp "github.com/NikitaMityushov/map_reduce/coordinator/internal/app/grpc"
 )
 
-type App struct {
-	GRPCSrv *grpcapp.App
+type Application struct {
+	GRPCSrv *grpcapp.GrpcApp
 }
 
 func New(
@@ -16,10 +16,10 @@ func New(
 	chunks []string,
 	nReduce int,
 
-) *App {
+) *Application {
 	grpcApp := grpcapp.New(log, grpcPort, chunks, nReduce)
 
-	return &App{
+	return &Application{
 		GRPCSrv: grpcApp,
 	}
 }

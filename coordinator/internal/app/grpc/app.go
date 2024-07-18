@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-type App struct {
+type GrpcApp struct {
 	log        *slog.Logger
 	gRPCServer *grpc.Server
 	port       int
@@ -20,19 +20,19 @@ func New(
 	port int,
 	chunks []string,
 	nReduce int,
-) *App {
+) *GrpcApp {
 	gRPCServer := grpc.NewServer()
 
 	api.RegisterServerAPI(gRPCServer, chunks, nReduce)
 
-	return &App{
+	return &GrpcApp{
 		log:        log,
 		gRPCServer: gRPCServer,
 		port:       port,
 	}
 }
 
-func (a *App) Run() error {
+func (a *GrpcApp) Run() error {
 	const op = "grpcapp.Run"
 
 	log := a.log.With(slog.String("op", op), slog.Int("port", a.port))
@@ -50,13 +50,13 @@ func (a *App) Run() error {
 	return nil
 }
 
-func (a *App) MustRun() {
+func (a *GrpcApp) MustRun() {
 	if err := a.Run(); err != nil {
 		panic(err)
 	}
 }
 
-func (a *App) Stop() {
+func (a *GrpcApp) Stop() {
 	const op = "grpcapp.Stop"
 
 	a.log.With(slog.String("op", op), slog.Int("port", a.port)).Info("Coordinator GRPC server stopped")
