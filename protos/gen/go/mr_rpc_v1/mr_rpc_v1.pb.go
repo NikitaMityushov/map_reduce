@@ -20,14 +20,64 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type GetTasksRequest struct {
+type TaskType int32
+
+const (
+	TaskType_MAP    TaskType = 0
+	TaskType_REDUCE TaskType = 1
+)
+
+// Enum value maps for TaskType.
+var (
+	TaskType_name = map[int32]string{
+		0: "MAP",
+		1: "REDUCE",
+	}
+	TaskType_value = map[string]int32{
+		"MAP":    0,
+		"REDUCE": 1,
+	}
+)
+
+func (x TaskType) Enum() *TaskType {
+	p := new(TaskType)
+	*p = x
+	return p
+}
+
+func (x TaskType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (TaskType) Descriptor() protoreflect.EnumDescriptor {
+	return file_mr_rpc_v1_proto_enumTypes[0].Descriptor()
+}
+
+func (TaskType) Type() protoreflect.EnumType {
+	return &file_mr_rpc_v1_proto_enumTypes[0]
+}
+
+func (x TaskType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use TaskType.Descriptor instead.
+func (TaskType) EnumDescriptor() ([]byte, []int) {
+	return file_mr_rpc_v1_proto_rawDescGZIP(), []int{0}
+}
+
+type TaskDto struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
+
+	Id       int64    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	TaskType TaskType `protobuf:"varint,2,opt,name=taskType,proto3,enum=mr_rpc.TaskType" json:"taskType,omitempty"`
+	Chunks   []string `protobuf:"bytes,3,rep,name=chunks,proto3" json:"chunks,omitempty"`
 }
 
-func (x *GetTasksRequest) Reset() {
-	*x = GetTasksRequest{}
+func (x *TaskDto) Reset() {
+	*x = TaskDto{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_mr_rpc_v1_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -35,13 +85,13 @@ func (x *GetTasksRequest) Reset() {
 	}
 }
 
-func (x *GetTasksRequest) String() string {
+func (x *TaskDto) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetTasksRequest) ProtoMessage() {}
+func (*TaskDto) ProtoMessage() {}
 
-func (x *GetTasksRequest) ProtoReflect() protoreflect.Message {
+func (x *TaskDto) ProtoReflect() protoreflect.Message {
 	mi := &file_mr_rpc_v1_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -53,21 +103,40 @@ func (x *GetTasksRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetTasksRequest.ProtoReflect.Descriptor instead.
-func (*GetTasksRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use TaskDto.ProtoReflect.Descriptor instead.
+func (*TaskDto) Descriptor() ([]byte, []int) {
 	return file_mr_rpc_v1_proto_rawDescGZIP(), []int{0}
 }
 
-type GetTasksResponse struct {
+func (x *TaskDto) GetId() int64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *TaskDto) GetTaskType() TaskType {
+	if x != nil {
+		return x.TaskType
+	}
+	return TaskType_MAP
+}
+
+func (x *TaskDto) GetChunks() []string {
+	if x != nil {
+		return x.Chunks
+	}
+	return nil
+}
+
+type GetTaskRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
-
-	Tasks []string `protobuf:"bytes,1,rep,name=tasks,proto3" json:"tasks,omitempty"`
 }
 
-func (x *GetTasksResponse) Reset() {
-	*x = GetTasksResponse{}
+func (x *GetTaskRequest) Reset() {
+	*x = GetTaskRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_mr_rpc_v1_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -75,13 +144,13 @@ func (x *GetTasksResponse) Reset() {
 	}
 }
 
-func (x *GetTasksResponse) String() string {
+func (x *GetTaskRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetTasksResponse) ProtoMessage() {}
+func (*GetTaskRequest) ProtoMessage() {}
 
-func (x *GetTasksResponse) ProtoReflect() protoreflect.Message {
+func (x *GetTaskRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_mr_rpc_v1_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -93,14 +162,54 @@ func (x *GetTasksResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetTasksResponse.ProtoReflect.Descriptor instead.
-func (*GetTasksResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetTaskRequest.ProtoReflect.Descriptor instead.
+func (*GetTaskRequest) Descriptor() ([]byte, []int) {
 	return file_mr_rpc_v1_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GetTasksResponse) GetTasks() []string {
+type GetTaskResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Task *TaskDto `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
+}
+
+func (x *GetTaskResponse) Reset() {
+	*x = GetTaskResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_mr_rpc_v1_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *GetTaskResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTaskResponse) ProtoMessage() {}
+
+func (x *GetTaskResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_mr_rpc_v1_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTaskResponse.ProtoReflect.Descriptor instead.
+func (*GetTaskResponse) Descriptor() ([]byte, []int) {
+	return file_mr_rpc_v1_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *GetTaskResponse) GetTask() *TaskDto {
 	if x != nil {
-		return x.Tasks
+		return x.Task
 	}
 	return nil
 }
@@ -109,20 +218,28 @@ var File_mr_rpc_v1_proto protoreflect.FileDescriptor
 
 var file_mr_rpc_v1_proto_rawDesc = []byte{
 	0x0a, 0x0f, 0x6d, 0x72, 0x5f, 0x72, 0x70, 0x63, 0x5f, 0x76, 0x31, 0x2e, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x12, 0x06, 0x6d, 0x72, 0x5f, 0x72, 0x70, 0x63, 0x22, 0x11, 0x0a, 0x0f, 0x47, 0x65, 0x74,
-	0x54, 0x61, 0x73, 0x6b, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x28, 0x0a, 0x10,
-	0x47, 0x65, 0x74, 0x54, 0x61, 0x73, 0x6b, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
-	0x12, 0x14, 0x0a, 0x05, 0x74, 0x61, 0x73, 0x6b, 0x73, 0x18, 0x01, 0x20, 0x03, 0x28, 0x09, 0x52,
-	0x05, 0x74, 0x61, 0x73, 0x6b, 0x73, 0x32, 0x4a, 0x0a, 0x09, 0x4d, 0x61, 0x70, 0x52, 0x65, 0x64,
-	0x75, 0x63, 0x65, 0x12, 0x3d, 0x0a, 0x08, 0x47, 0x65, 0x74, 0x54, 0x61, 0x73, 0x6b, 0x73, 0x12,
-	0x17, 0x2e, 0x6d, 0x72, 0x5f, 0x72, 0x70, 0x63, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x61, 0x73, 0x6b,
-	0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x6d, 0x72, 0x5f, 0x72, 0x70,
-	0x63, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x61, 0x73, 0x6b, 0x73, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
-	0x73, 0x65, 0x42, 0x38, 0x5a, 0x36, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d,
-	0x2f, 0x6e, 0x69, 0x6b, 0x69, 0x74, 0x61, 0x6d, 0x69, 0x74, 0x79, 0x75, 0x73, 0x68, 0x6f, 0x76,
-	0x2f, 0x6d, 0x61, 0x70, 0x5f, 0x72, 0x65, 0x64, 0x75, 0x63, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74,
-	0x6f, 0x73, 0x2f, 0x6d, 0x72, 0x5f, 0x72, 0x70, 0x63, 0x5f, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72,
-	0x6f, 0x74, 0x6f, 0x33,
+	0x6f, 0x12, 0x06, 0x6d, 0x72, 0x5f, 0x72, 0x70, 0x63, 0x22, 0x5f, 0x0a, 0x07, 0x54, 0x61, 0x73,
+	0x6b, 0x44, 0x74, 0x6f, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03,
+	0x52, 0x02, 0x69, 0x64, 0x12, 0x2c, 0x0a, 0x08, 0x74, 0x61, 0x73, 0x6b, 0x54, 0x79, 0x70, 0x65,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x10, 0x2e, 0x6d, 0x72, 0x5f, 0x72, 0x70, 0x63, 0x2e,
+	0x54, 0x61, 0x73, 0x6b, 0x54, 0x79, 0x70, 0x65, 0x52, 0x08, 0x74, 0x61, 0x73, 0x6b, 0x54, 0x79,
+	0x70, 0x65, 0x12, 0x16, 0x0a, 0x06, 0x63, 0x68, 0x75, 0x6e, 0x6b, 0x73, 0x18, 0x03, 0x20, 0x03,
+	0x28, 0x09, 0x52, 0x06, 0x63, 0x68, 0x75, 0x6e, 0x6b, 0x73, 0x22, 0x10, 0x0a, 0x0e, 0x47, 0x65,
+	0x74, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22, 0x36, 0x0a, 0x0f,
+	0x47, 0x65, 0x74, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12,
+	0x23, 0x0a, 0x04, 0x74, 0x61, 0x73, 0x6b, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e,
+	0x6d, 0x72, 0x5f, 0x72, 0x70, 0x63, 0x2e, 0x54, 0x61, 0x73, 0x6b, 0x44, 0x74, 0x6f, 0x52, 0x04,
+	0x74, 0x61, 0x73, 0x6b, 0x2a, 0x1f, 0x0a, 0x08, 0x54, 0x61, 0x73, 0x6b, 0x54, 0x79, 0x70, 0x65,
+	0x12, 0x07, 0x0a, 0x03, 0x4d, 0x41, 0x50, 0x10, 0x00, 0x12, 0x0a, 0x0a, 0x06, 0x52, 0x45, 0x44,
+	0x55, 0x43, 0x45, 0x10, 0x01, 0x32, 0x47, 0x0a, 0x09, 0x4d, 0x61, 0x70, 0x52, 0x65, 0x64, 0x75,
+	0x63, 0x65, 0x12, 0x3a, 0x0a, 0x07, 0x47, 0x65, 0x74, 0x54, 0x61, 0x73, 0x6b, 0x12, 0x16, 0x2e,
+	0x6d, 0x72, 0x5f, 0x72, 0x70, 0x63, 0x2e, 0x47, 0x65, 0x74, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x6d, 0x72, 0x5f, 0x72, 0x70, 0x63, 0x2e, 0x47,
+	0x65, 0x74, 0x54, 0x61, 0x73, 0x6b, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x42, 0x38,
+	0x5a, 0x36, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x6e, 0x69, 0x6b,
+	0x69, 0x74, 0x61, 0x6d, 0x69, 0x74, 0x79, 0x75, 0x73, 0x68, 0x6f, 0x76, 0x2f, 0x6d, 0x61, 0x70,
+	0x5f, 0x72, 0x65, 0x64, 0x75, 0x63, 0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x73, 0x2f, 0x6d,
+	0x72, 0x5f, 0x72, 0x70, 0x63, 0x5f, 0x76, 0x31, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -137,19 +254,24 @@ func file_mr_rpc_v1_proto_rawDescGZIP() []byte {
 	return file_mr_rpc_v1_proto_rawDescData
 }
 
-var file_mr_rpc_v1_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_mr_rpc_v1_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_mr_rpc_v1_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_mr_rpc_v1_proto_goTypes = []interface{}{
-	(*GetTasksRequest)(nil),  // 0: mr_rpc.GetTasksRequest
-	(*GetTasksResponse)(nil), // 1: mr_rpc.GetTasksResponse
+	(TaskType)(0),           // 0: mr_rpc.TaskType
+	(*TaskDto)(nil),         // 1: mr_rpc.TaskDto
+	(*GetTaskRequest)(nil),  // 2: mr_rpc.GetTaskRequest
+	(*GetTaskResponse)(nil), // 3: mr_rpc.GetTaskResponse
 }
 var file_mr_rpc_v1_proto_depIdxs = []int32{
-	0, // 0: mr_rpc.MapReduce.GetTasks:input_type -> mr_rpc.GetTasksRequest
-	1, // 1: mr_rpc.MapReduce.GetTasks:output_type -> mr_rpc.GetTasksResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0, // 0: mr_rpc.TaskDto.taskType:type_name -> mr_rpc.TaskType
+	1, // 1: mr_rpc.GetTaskResponse.task:type_name -> mr_rpc.TaskDto
+	2, // 2: mr_rpc.MapReduce.GetTask:input_type -> mr_rpc.GetTaskRequest
+	3, // 3: mr_rpc.MapReduce.GetTask:output_type -> mr_rpc.GetTaskResponse
+	3, // [3:4] is the sub-list for method output_type
+	2, // [2:3] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_mr_rpc_v1_proto_init() }
@@ -159,7 +281,7 @@ func file_mr_rpc_v1_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_mr_rpc_v1_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetTasksRequest); i {
+			switch v := v.(*TaskDto); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -171,7 +293,19 @@ func file_mr_rpc_v1_proto_init() {
 			}
 		}
 		file_mr_rpc_v1_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetTasksResponse); i {
+			switch v := v.(*GetTaskRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_mr_rpc_v1_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetTaskResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -188,13 +322,14 @@ func file_mr_rpc_v1_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_mr_rpc_v1_proto_rawDesc,
-			NumEnums:      0,
-			NumMessages:   2,
+			NumEnums:      1,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_mr_rpc_v1_proto_goTypes,
 		DependencyIndexes: file_mr_rpc_v1_proto_depIdxs,
+		EnumInfos:         file_mr_rpc_v1_proto_enumTypes,
 		MessageInfos:      file_mr_rpc_v1_proto_msgTypes,
 	}.Build()
 	File_mr_rpc_v1_proto = out.File

@@ -1,1 +1,1 @@
-go run ./cmd/main.go --config=./config/local.yaml --chunks="123.txt 321.txt" --nReduce=10
+go run ./cmd/main.go --config=./config/local.yaml --chunks="123.txt 321.txt vasya.txt valera.txt" --nReduce=10

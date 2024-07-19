@@ -5,6 +5,7 @@ import (
 
 	"github.com/NikitaMityushov/map_reduce/protos/gen/go/mr_rpc_v1"
 	grpcclient "github.com/NikitaMityushov/map_reduce/worker/internal/clients/mreduce/grpc"
+	"github.com/NikitaMityushov/map_reduce/worker/internal/converter"
 	"github.com/NikitaMityushov/map_reduce/worker/internal/domain/model"
 )
 
@@ -13,15 +14,15 @@ type taskServiceImpl struct {
 }
 
 func (cs *taskServiceImpl) GetTask() (*model.Task, error) {
-	resp, err := cs.cl.Api.GetTasks(context.TODO(), &mr_rpc_v1.GetTasksRequest{})
+	resp, err := cs.cl.Api.GetTask(context.TODO(), &mr_rpc_v1.GetTaskRequest{})
 	if err != nil {
-		panic("tasks not found")
+		panic(err)
 	}
 
-	return &model.Task{Id: 1, TaskType: model.MAP, Chunks: resp.Tasks, Status: model.IN_PROCCESS}, nil // todo
+	return converter.ToModel(resp.Task), nil
 }
 
-func NewCoordinatorService(
+func NewTaskService(
 	client *grpcclient.Client,
 ) *taskServiceImpl {
 	return &taskServiceImpl{

@@ -5,13 +5,24 @@ package mr_rpc;
 option go_package = "github.com/nikitamityushov/map_reduce/protos/mr_rpc_v1";
 
 service MapReduce {
-    rpc GetTasks(GetTasksRequest) returns (GetTasksResponse);
+    rpc GetTask(GetTaskRequest) returns (GetTaskResponse);
 }
 
-message GetTasksRequest {
+enum TaskType {
+    MAP = 0;
+    REDUCE = 1;
+}
+
+message TaskDto {
+    int64 id = 1;
+    TaskType taskType = 2;
+    repeated string chunks = 3;
+}
+
+message GetTaskRequest {
 
 }
 
-message GetTasksResponse {
-    repeated string tasks = 1;
+message GetTaskResponse {
+    TaskDto task = 1;
 }

@@ -4,7 +4,6 @@ type Task struct {
 	Id       uint
 	TaskType TaskType
 	Chunks   []string
-	Status   Status
 }
 
 type TaskType uint8

@@ -19,7 +19,7 @@ type Client struct {
 	log *slog.Logger
 }
 
-func New(
+func NewClient(
 	ctx context.Context,
 	log *slog.Logger,
 	address string,

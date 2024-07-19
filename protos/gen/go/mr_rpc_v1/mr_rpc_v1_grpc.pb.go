@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MapReduceClient interface {
-	GetTasks(ctx context.Context, in *GetTasksRequest, opts ...grpc.CallOption) (*GetTasksResponse, error)
+	GetTask(ctx context.Context, in *GetTaskRequest, opts ...grpc.CallOption) (*GetTaskResponse, error)
 }
 
 type mapReduceClient struct {
@@ -33,9 +33,9 @@ func NewMapReduceClient(cc grpc.ClientConnInterface) MapReduceClient {
 	return &mapReduceClient{cc}
 }
 
-func (c *mapReduceClient) GetTasks(ctx context.Context, in *GetTasksRequest, opts ...grpc.CallOption) (*GetTasksResponse, error) {
-	out := new(GetTasksResponse)
-	err := c.cc.Invoke(ctx, "/mr_rpc.MapReduce/GetTasks", in, out, opts...)
+func (c *mapReduceClient) GetTask(ctx context.Context, in *GetTaskRequest, opts ...grpc.CallOption) (*GetTaskResponse, error) {
+	out := new(GetTaskResponse)
+	err := c.cc.Invoke(ctx, "/mr_rpc.MapReduce/GetTask", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *mapReduceClient) GetTasks(ctx context.Context, in *GetTasksRequest, opt
 // All implementations must embed UnimplementedMapReduceServer
 // for forward compatibility
 type MapReduceServer interface {
-	GetTasks(context.Context, *GetTasksRequest) (*GetTasksResponse, error)
+	GetTask(context.Context, *GetTaskRequest) (*GetTaskResponse, error)
 	mustEmbedUnimplementedMapReduceServer()
 }
 
@@ -54,8 +54,8 @@ type MapReduceServer interface {
 type UnimplementedMapReduceServer struct {
 }
 
-func (UnimplementedMapReduceServer) GetTasks(context.Context, *GetTasksRequest) (*GetTasksResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTasks not implemented")
+func (UnimplementedMapReduceServer) GetTask(context.Context, *GetTaskRequest) (*GetTaskResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTask not implemented")
 }
 func (UnimplementedMapReduceServer) mustEmbedUnimplementedMapReduceServer() {}
 
@@ -70,20 +70,20 @@ func RegisterMapReduceServer(s grpc.ServiceRegistrar, srv MapReduceServer) {
 	s.RegisterService(&MapReduce_ServiceDesc, srv)
 }
 
-func _MapReduce_GetTasks_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTasksRequest)
+func _MapReduce_GetTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTaskRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MapReduceServer).GetTasks(ctx, in)
+		return srv.(MapReduceServer).GetTask(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/mr_rpc.MapReduce/GetTasks",
+		FullMethod: "/mr_rpc.MapReduce/GetTask",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MapReduceServer).GetTasks(ctx, req.(*GetTasksRequest))
+		return srv.(MapReduceServer).GetTask(ctx, req.(*GetTaskRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -96,8 +96,8 @@ var MapReduce_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*MapReduceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetTasks",
-			Handler:    _MapReduce_GetTasks_Handler,
+			MethodName: "GetTask",
+			Handler:    _MapReduce_GetTask_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

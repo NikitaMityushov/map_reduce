@@ -14,7 +14,7 @@ type CoordinatorState struct {
 }
 
 // Constructor
-func NewCoordinatorState(chunks []string, nReduce int) CoordinatorState {
+func InitCoordinatorState(chunks []string, nReduce int) CoordinatorState {
 	mapTasks := make([]domainModels.Task, 0, len(chunks))
 	var curTaskId uint = 0
 	for _, ch := range chunks {

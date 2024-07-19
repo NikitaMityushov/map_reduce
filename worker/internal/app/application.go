@@ -18,11 +18,11 @@ type Application struct {
 func (a *Application) Run() {
 	const op = "Application.Run"
 	a.Log.Info(op)
-	client, err := grpcclient.New(context.Background(), a.Log, "localhost:50051", time.Hour, 10)
+	client, err := grpcclient.NewClient(context.TODO(), a.Log, "localhost:50051", time.Hour, 10)
 	if err != nil {
 		panic("Error with client init")
 	}
-	service := infraService.NewCoordinatorService(client)
+	service := infraService.NewTaskService(client)
 
 	task, err := service.GetTask()
 	if err != nil {
