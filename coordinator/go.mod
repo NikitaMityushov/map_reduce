@@ -3,7 +3,7 @@ module github.com/NikitaMityushov/map_reduce/coordinator
 go 1.22.2
 
 require (
-	github.com/NikitaMityushov/map_reduce/protos v0.0.1
+	github.com/NikitaMityushov/map_reduce/protos v0.0.2
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	google.golang.org/grpc v1.65.0
 )
