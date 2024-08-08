@@ -3,6 +3,7 @@ syntax = "proto3";
 package mr_rpc;
 
 option go_package = "github.com/nikitamityushov/map_reduce/protos/mr_rpc_v1";
+option java_package = "com.github.nikitamityushov.map_reduce.protos.mr_rpc_v1";
 
 service MapReduce {
     rpc GetTask(GetTaskRequest) returns (GetTaskResponse);
